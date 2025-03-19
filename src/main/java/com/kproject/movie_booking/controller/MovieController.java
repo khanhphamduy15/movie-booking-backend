@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @AllArgsConstructor
 @RequestMapping("/movie")
 public class MovieController {
-    MovieService movieService;
+    private MovieService movieService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovie(@PathVariable Long id) {

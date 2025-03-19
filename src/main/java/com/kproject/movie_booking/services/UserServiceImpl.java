@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kproject.movie_booking.exceptions.EntityNotFoundException;
 import com.kproject.movie_booking.models.User;
 import com.kproject.movie_booking.repositories.UserRepository;
 
@@ -36,4 +37,10 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
     
+    static User unwrapUser(Optional<User> entity, Long id) {
+        if (entity.isPresent())
+            return entity.get();
+        else
+            throw new EntityNotFoundException(id, User.class);
+    }
 }
