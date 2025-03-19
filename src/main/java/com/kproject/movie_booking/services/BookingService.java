@@ -8,7 +8,7 @@ import com.kproject.movie_booking.models.Booking;
 public interface BookingService {
     Booking createBooking(Booking booking); // Tạo đơn đặt vé
 
-    List<Booking> getBookingsByUser(Long userId); // Lấy danh sách đặt vé của user
+    Optional<List<Booking>> getBookingsByUser(Long userId); // Lấy danh sách đặt vé của user
 
     Optional<Booking> getBookingById(Long bookingId); // Lấy chi tiết đơn đặt vé
 

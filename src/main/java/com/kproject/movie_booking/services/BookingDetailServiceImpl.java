@@ -3,34 +3,37 @@ package com.kproject.movie_booking.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.kproject.movie_booking.exceptions.EntityNotFoundException;
 import com.kproject.movie_booking.models.BookingDetail;
+import com.kproject.movie_booking.repositories.BookingDetailRepository;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
+@Service
 public class BookingDetailServiceImpl implements BookingDetailService {
-
-    private BookingDetailService bookingDetailService;
+    private BookingDetailRepository bookingDetailRepository;
 
     @Override
     public BookingDetail addBookingDetail(BookingDetail bookingDetail) {
-        return bookingDetailService.addBookingDetail(bookingDetail);
+        return bookingDetailRepository.save(bookingDetail);
     }
 
     @Override
-    public List<BookingDetail> getBookingDetailsByBookingId(Long bookingId) {
-        return bookingDetailService.getBookingDetailsByBookingId(bookingId);
+    public Optional<List<BookingDetail>> getBookingDetailsByBookingId(Long bookingId) {
+        return bookingDetailRepository.findByBookingId(bookingId);
     }
 
     @Override
     public Optional<BookingDetail> getBookingDetailById(Long id) {
-        return bookingDetailService.getBookingDetailById(id);
+        return bookingDetailRepository.findById(id);
     }
 
     @Override
     public void deleteBookingDetail(Long id) {
-        bookingDetailService.deleteBookingDetail(id);
+        bookingDetailRepository.deleteById(id);
     }
 
     static BookingDetail unwrapBookingDetail(Optional<BookingDetail> entity, Long id) {

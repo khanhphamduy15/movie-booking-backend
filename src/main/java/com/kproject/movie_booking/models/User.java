@@ -38,8 +38,7 @@ public class User {
     @NonNull
     private String fullname;
 
-    @Column(name = "role", nullable = false)
-    @NonNull
+    @Column(name = "role")
     private String role;
     
     @OneToMany(mappedBy = "user")

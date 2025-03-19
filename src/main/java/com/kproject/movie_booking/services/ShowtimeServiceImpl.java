@@ -3,38 +3,42 @@ package com.kproject.movie_booking.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.kproject.movie_booking.models.Showtime;
+import org.springframework.stereotype.Service;
 
-public class ShowtimeServiceImpl implements ShowtimeService{
+import com.kproject.movie_booking.models.Showtime;
+import com.kproject.movie_booking.repositories.ShowtimeRepository;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class ShowtimeServiceImpl implements ShowtimeService {
+
+    private ShowtimeRepository showtimeRepository;
 
     @Override
     public Showtime addShowtime(Showtime showtime) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addShowtime'");
+        return showtimeRepository.save(showtime);
     }
 
     @Override
     public List<Showtime> getAllShowtimes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllShowtimes'");
+        return showtimeRepository.findAll();
     }
 
     @Override
     public List<Showtime> getShowtimesByMovie(Long movieId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getShowtimesByMovie'");
+        return (List<Showtime>) showtimeRepository.findByMovieId(movieId);
     }
 
     @Override
     public Optional<Showtime> getShowtimeById(Long showtimeId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getShowtimeById'");
+        return showtimeRepository.findById(showtimeId);
     }
 
     @Override
     public void deleteShowtime(Long showtimeId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteShowtime'");
+        showtimeRepository.deleteById(showtimeId);
     }
-    
+
 }
