@@ -1,6 +1,10 @@
 package com.kproject.movie_booking.models;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,19 +34,14 @@ public class Showtime {
 
     @Column(name = "show_time", nullable = false)
     @NonNull
-    private String showtime;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate showtime;
 
-    @Column(name = "price", nullable = false)
-    private double price;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id", nullable = false)
-    private User user;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "showtime")
     private List<Booking> bookings;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = false)
     private Movie movie;
 }

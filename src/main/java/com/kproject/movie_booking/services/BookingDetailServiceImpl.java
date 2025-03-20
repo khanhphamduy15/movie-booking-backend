@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.kproject.movie_booking.exceptions.EntityNotFoundException;
+import com.kproject.movie_booking.models.Booking;
 import com.kproject.movie_booking.models.BookingDetail;
 import com.kproject.movie_booking.repositories.BookingDetailRepository;
+import com.kproject.movie_booking.repositories.BookingRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -15,20 +17,25 @@ import lombok.AllArgsConstructor;
 @Service
 public class BookingDetailServiceImpl implements BookingDetailService {
     private BookingDetailRepository bookingDetailRepository;
+    private BookingRepository bookingRepository;
 
     @Override
-    public BookingDetail addBookingDetail(BookingDetail bookingDetail) {
+    public BookingDetail addBookingDetail(BookingDetail bookingDetail, Long bookingId) {
+        Booking booking = BookingServiceImpl.unwrapBooking(bookingRepository.findById(bookingId), bookingId);
+        bookingDetail.setBooking(booking);
+        booking.addBookingDetail(bookingDetail);
         return bookingDetailRepository.save(bookingDetail);
     }
 
     @Override
-    public Optional<List<BookingDetail>> getBookingDetailsByBookingId(Long bookingId) {
-        return bookingDetailRepository.findByBookingId(bookingId);
+    public List<BookingDetail> getBookingDetailsByBookingId(Long bookingId) {
+        return (List<BookingDetail>) bookingDetailRepository.findByBookingId(bookingId);
     }
 
     @Override
-    public Optional<BookingDetail> getBookingDetailById(Long id) {
-        return bookingDetailRepository.findById(id);
+    public BookingDetail getBookingDetailById(Long id) {
+        Optional<BookingDetail> bookingDetail = bookingDetailRepository.findById(id);
+        return unwrapBookingDetail(bookingDetail, id);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.kproject.movie_booking.models;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,9 @@ public class BookingDetail {
     @Column(name = "seat_number", nullable = false)
     @NonNull
     private String seatNum;
+
+    @Column(name = "price", nullable = false)
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "booking_id", referencedColumnName = "id")

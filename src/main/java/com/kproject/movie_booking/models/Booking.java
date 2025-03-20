@@ -2,6 +2,8 @@ package com.kproject.movie_booking.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,21 +31,40 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price")
     private double totalPrice;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @NonNull
     private String status;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "showtime_id", referencedColumnName = "id", nullable = false)
     private Showtime showtime;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetail> bookingDetails;
+
+    public void updateTotalPrice() {
+        this.totalPrice = bookingDetails.stream()
+                .mapToDouble(BookingDetail::getPrice)
+                .sum();
+    }
+
+    public void addBookingDetail(BookingDetail detail) {
+        bookingDetails.add(detail);
+        detail.setBooking(this);
+        updateTotalPrice();
+    }
+
+    public void removeBookingDetail(BookingDetail detail) {
+        bookingDetails.remove(detail);
+        detail.setBooking(null);
+        updateTotalPrice();
+    }
 }

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.kproject.movie_booking.exceptions.EntityNotFoundException;
 import com.kproject.movie_booking.models.Booking;
+import com.kproject.movie_booking.models.Showtime;
 import com.kproject.movie_booking.models.User;
 import com.kproject.movie_booking.repositories.BookingRepository;
+import com.kproject.movie_booking.repositories.ShowtimeRepository;
 import com.kproject.movie_booking.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -19,11 +21,16 @@ public class BookingServiceImpl implements BookingService {
 
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
+    private ShowtimeRepository showtimeRepository;
     
     @Override
-    public Booking createBooking(Booking booking, Long userId) {
+    public Booking createBooking(Booking booking, Long userId, Long showtimeId) {
         User user = UserServiceImpl.unwrapUser(userRepository.findById(userId), userId);
+        Showtime showtime = ShowtimeServiceImpl.unwrapShowtime(showtimeRepository.findById(showtimeId), showtimeId);
         booking.setUser(user);
+        booking.setShowtime(showtime);
+        booking.setStatus("PENDING");
+        booking.setTotalPrice(0.0);     
         return bookingRepository.save(booking);
     }
 
@@ -50,6 +57,11 @@ public class BookingServiceImpl implements BookingService {
             return entity.get();
         else
             throw new EntityNotFoundException(id, Booking.class);
+    }
+
+    @Override
+    public List<Booking> getAllBookings() {
+        return (List<Booking>) bookingRepository.findAll();
     }
 
 }

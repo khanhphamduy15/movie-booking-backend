@@ -2,6 +2,8 @@ package com.kproject.movie_booking.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,9 +42,9 @@ public class User {
 
     @Column(name = "role")
     private String role;
-    
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Booking> booking;
-    
 
 }
