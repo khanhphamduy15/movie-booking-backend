@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -30,14 +31,17 @@ public class User {
 
     @Column(name = "email", nullable = false)
     @NonNull
+    @NotBlank(message = "Email cannot be blank")
     private String email;
 
     @Column(name = "password", nullable = false)
     @NonNull
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
     @Column(name = "fullname", nullable = false)
     @NonNull
+    @NotBlank(message = "Fullname cannot be blank")
     private String fullname;
 
     @Column(name = "role")

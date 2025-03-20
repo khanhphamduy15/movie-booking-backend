@@ -45,7 +45,9 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
     @Override
     public void deleteShowtime(Long showtimeId) {
-        showtimeRepository.deleteById(showtimeId);
+        Optional<Showtime> showtime = showtimeRepository.findById(showtimeId);
+        Showtime unwrappedShowtime = unwrapShowtime(showtime, showtimeId);
+        showtimeRepository.delete(unwrappedShowtime);
     }
 
     static Showtime unwrapShowtime(Optional<Showtime> entity, Long id) {

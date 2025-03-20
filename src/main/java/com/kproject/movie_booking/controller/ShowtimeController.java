@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.kproject.movie_booking.models.Showtime;
 import com.kproject.movie_booking.services.ShowtimeService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -42,7 +44,7 @@ public class ShowtimeController {
     }
 
     @PostMapping("/movie/{movieId}")
-    public ResponseEntity<Showtime> createShowtime(@RequestBody Showtime showtime, @PathVariable Long movieId) {
+    public ResponseEntity<Showtime> createShowtime(@Valid @RequestBody Showtime showtime, @PathVariable Long movieId) {
         showtimeService.addShowtime(showtime, movieId); 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

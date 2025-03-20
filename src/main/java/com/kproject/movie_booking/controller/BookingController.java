@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kproject.movie_booking.models.Booking;
 import com.kproject.movie_booking.services.BookingService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,7 @@ public class BookingController {
     }
 
     @PostMapping("/user/{userId}/showtime/{showtimeId}")
-    public ResponseEntity<Booking> saveBookingByUserId(@RequestBody Booking booking, @PathVariable Long userId, @PathVariable Long showtimeId) {
+    public ResponseEntity<Booking> saveBookingByUserId(@Valid @RequestBody Booking booking, @PathVariable Long userId, @PathVariable Long showtimeId) {
         return new ResponseEntity<Booking>(bookingService.createBooking(booking, userId,showtimeId),HttpStatus.OK);
     }
 

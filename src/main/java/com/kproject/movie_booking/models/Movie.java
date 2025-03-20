@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -32,6 +33,7 @@ public class Movie {
 
     @Column(name = "title", nullable = false)
     @NonNull
+    @NotBlank(message = "Title cannot be blank")
     private String title;
 
     @Column(name = "description")
@@ -39,9 +41,11 @@ public class Movie {
     private String description;
 
     @Column(name = "duration", nullable = false)
+    @NotBlank(message = "Duration cannot be blank")
     private int duration;
 
     @Column(name = "releaseDate")
+    @NotBlank(message = "Release date cannot be blank")
     private LocalDate releaseDate;
 
     @JsonIgnore

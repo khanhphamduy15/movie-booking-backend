@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kproject.movie_booking.models.BookingDetail;
 import com.kproject.movie_booking.services.BookingDetailService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class BookingDetailController {
     private BookingDetailService bookingDetailService;
 
     @PostMapping("/booking/{bookingId}")
-    public ResponseEntity<BookingDetail> saveBookingDetail(@RequestBody BookingDetail bookingDetail,
+    public ResponseEntity<BookingDetail> saveBookingDetail(@Valid @RequestBody BookingDetail bookingDetail,
             @PathVariable Long bookingId) {
         return new ResponseEntity<>(bookingDetailService.addBookingDetail(bookingDetail, bookingId),
                 HttpStatus.CREATED);

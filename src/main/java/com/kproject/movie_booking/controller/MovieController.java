@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kproject.movie_booking.models.Movie;
 import com.kproject.movie_booking.services.MovieService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,12 +39,12 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<Movie> saveMovieEntity(@RequestBody Movie movie) {
+    public ResponseEntity<Movie> saveMovieEntity(@Valid @RequestBody Movie movie) {
         return new ResponseEntity<>(movieService.saveMovie(movie),HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+    public ResponseEntity<Movie> updateMovie(@Valid @RequestBody Movie movie, @PathVariable Long id) {
         return new ResponseEntity<>(movieService.updateMovie(id, movie),HttpStatus.OK);
     }
 

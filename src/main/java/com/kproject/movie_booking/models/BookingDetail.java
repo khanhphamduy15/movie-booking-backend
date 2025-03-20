@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -28,6 +29,7 @@ public class BookingDetail {
 
     @Column(name = "seat_number", nullable = false)
     @NonNull
+    @NotBlank(message = "Seat number cannot be blank")
     private String seatNum;
 
     @Column(name = "price", nullable = false)

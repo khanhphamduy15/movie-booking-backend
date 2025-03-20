@@ -29,7 +29,11 @@ public class BookingDetailServiceImpl implements BookingDetailService {
 
     @Override
     public List<BookingDetail> getBookingDetailsByBookingId(Long bookingId) {
-        return (List<BookingDetail>) bookingDetailRepository.findByBookingId(bookingId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findByBookingId(bookingId);
+        if (bookingDetails.isEmpty()) {
+            throw new EntityNotFoundException(bookingId, Booking.class);
+        }
+        return bookingDetails;
     }
 
     @Override
@@ -40,11 +44,13 @@ public class BookingDetailServiceImpl implements BookingDetailService {
 
     @Override
     public void deleteBookingDetail(Long id) {
-        bookingDetailRepository.deleteById(id);
+        Optional<BookingDetail> bookingDetail = bookingDetailRepository.findById(id);
+        BookingDetail unwrapedBookingDetail = unwrapBookingDetail(bookingDetail, id);
+        bookingDetailRepository.delete(unwrapedBookingDetail);
     }
 
     static BookingDetail unwrapBookingDetail(Optional<BookingDetail> entity, Long id) {
-        if (entity.isPresent())
+        if (entity.isPresent()) 
             return entity.get();
         else
             throw new EntityNotFoundException(id, BookingDetail.class);
