@@ -1,7 +1,6 @@
 package com.kproject.movie_booking.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +24,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<Optional<User>>(userService.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<User>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -35,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<Optional<User>> getUserByEmail(@PathVariable String email) {
-        return new ResponseEntity<Optional<User>>(userService.getUserByEmail(email), HttpStatus.OK);
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        return new ResponseEntity<User>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
     @PostMapping

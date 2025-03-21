@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.kproject.movie_booking.exceptions.BookingCancelledException;
 import com.kproject.movie_booking.exceptions.EntityNotFoundException;
 import com.kproject.movie_booking.models.Booking;
 import com.kproject.movie_booking.models.Showtime;
@@ -22,7 +23,7 @@ public class BookingServiceImpl implements BookingService {
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
     private ShowtimeRepository showtimeRepository;
-    
+
     @Override
     public Booking createBooking(Booking booking, Long userId, Long showtimeId) {
         User user = UserServiceImpl.unwrapUser(userRepository.findById(userId), userId);
@@ -30,7 +31,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(user);
         booking.setShowtime(showtime);
         booking.setStatus("PENDING");
-        booking.setTotalPrice(0.0);     
+        booking.setTotalPrice(0.0);
         return bookingRepository.save(booking);
     }
 
@@ -49,7 +50,12 @@ public class BookingServiceImpl implements BookingService {
     public void cancelBooking(Long bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         Booking unwrappedBooking = unwrapBooking(booking, bookingId);
-        bookingRepository.delete(unwrappedBooking);
+        String status = unwrappedBooking.getStatus();
+        if (status.equals("PENDING")) {
+            unwrappedBooking.setStatus("CANCELLED");
+            bookingRepository.save(unwrappedBooking);
+        }
+        else throw new BookingCancelledException(bookingId, Booking.class);
     }
 
     static Booking unwrapBooking(Optional<Booking> entity, Long id) {
@@ -62,6 +68,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getAllBookings() {
         return (List<Booking>) bookingRepository.findAll();
+    }
+
+    @Override
+    public void deleteBookingById(Long bookingId) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        Booking unwrappedBooking = unwrapBooking(booking, bookingId);
+        bookingRepository.delete(unwrappedBooking);
     }
 
 }

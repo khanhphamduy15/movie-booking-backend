@@ -14,4 +14,6 @@ public interface BookingService {
     void cancelBooking(Long bookingId); // Hủy đơn đặt vé
 
     List<Booking> getAllBookings();
+
+    void deleteBookingById(Long bookingId);
 }

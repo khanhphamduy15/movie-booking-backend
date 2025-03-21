@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.kproject.movie_booking.exceptions.BookingCancelledException;
 import com.kproject.movie_booking.exceptions.EntityNotFoundException;
 import com.kproject.movie_booking.exceptions.ErrorResponse;
+import com.kproject.movie_booking.exceptions.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler({ EntityNotFoundException.class })
+    @ExceptionHandler({ EntityNotFoundException.class, UserNotFoundException.class })
     public ResponseEntity<Object> handleResourceNotFoundException(RuntimeException ex) {
         ErrorResponse error = new ErrorResponse(Arrays.asList(ex.getLocalizedMessage()));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -51,7 +53,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse error = new ErrorResponse(errors);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler({ BookingCancelledException.class })
+    public ResponseEntity<Object> handleBookingCancelledException(RuntimeException ex) {
+        ErrorResponse error = new ErrorResponse(Arrays.asList(ex.getLocalizedMessage()));
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }

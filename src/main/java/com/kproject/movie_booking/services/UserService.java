@@ -1,16 +1,15 @@
 package com.kproject.movie_booking.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.kproject.movie_booking.models.User;
 
 public interface UserService {
-    User registerUser(User user); // Đăng ký tài khoản
+    User registerUser(User user); 
 
-    Optional<User> getUserById(Long userId); // Tìm user theo ID
+    User getUserById(Long userId); 
 
-    Optional<User> getUserByEmail(String email); // Tìm user theo email
+    User getUserByEmail(String email);
 
-    List<User> getAllUsers(); // Lấy danh sách người dùng
+    List<User> getAllUsers(); 
 }

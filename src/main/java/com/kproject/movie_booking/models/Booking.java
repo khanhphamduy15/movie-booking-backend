@@ -1,5 +1,6 @@
 package com.kproject.movie_booking.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +49,7 @@ public class Booking {
 
     @JsonIgnore
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
-    private List<BookingDetail> bookingDetails;
+    private List<BookingDetail> bookingDetails = new ArrayList<>();
 
     public void updateTotalPrice() {
         this.totalPrice = bookingDetails.stream()
