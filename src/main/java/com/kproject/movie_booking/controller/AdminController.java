@@ -11,8 +11,9 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @RestController
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AdminController {
 
     private UserService userService;
-    @GetMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<User> getMethodName(@Valid @RequestBody User admin) {
         userService.registerAdmin(admin);
         return new ResponseEntity<>(HttpStatus.CREATED);

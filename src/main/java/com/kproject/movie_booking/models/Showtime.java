@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Showtime {
     private LocalDate showtime;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "showtime")
+    @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
     @ManyToOne(optional = false)

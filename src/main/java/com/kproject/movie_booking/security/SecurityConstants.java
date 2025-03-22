@@ -6,5 +6,5 @@ public class SecurityConstants {
     public static final String BEARER = "Bearer "; 
     public static final String AUTHORIZATION = "Authorization"; 
     public static final String USER_REGISTER_PATH = "/user/register"; 
-    public static final String ADMIN_REGISTER_PATH = "/user/"; 
+    public static final String ADMIN_REGISTER_PATH = "/admin/register"; 
 }

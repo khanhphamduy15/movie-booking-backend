@@ -2,12 +2,10 @@ package com.kproject.movie_booking.security.filter;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -25,16 +23,18 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private CustomAuthenticationManager customAuthenticationManager;
+    CustomAuthenticationManager customAuthenticationManager;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         try {
             User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            Authentication authentication = customAuthenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-            return authentication;
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),
+                    user.getPassword());
+            Authentication authResult = customAuthenticationManager.authenticate(authentication);
+            return authResult;
         } catch (IOException e) {
+            System.out.println("Error reading request input stream");
             throw new RuntimeException("Error reading request input stream", e);
         }
     }
@@ -42,17 +42,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-
-        String roles = authResult.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+        if (authResult == null || authResult.getPrincipal() == null) {
+            throw new RuntimeException("Authentication result is null!");
+        }
+        User user = (User) authResult.getPrincipal();
+        String role = user.getRole();
 
         String token = JWT.create()
-                .withSubject(authResult.getName())
+                .withSubject(user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRATION))
-                .withClaim("roles", List.of(roles))
+                .withClaim("role", role)
                 .sign(Algorithm.HMAC512(SecurityConstants.SECRET_KEY));
-
         response.addHeader(SecurityConstants.AUTHORIZATION, SecurityConstants.BEARER + token);
     }
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class User {
     @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    @Column(name = "fullname", nullable = false)
+    @Column(name = "fullname")
     @NonNull
     @NotBlank(message = "Fullname cannot be blank")
     private String fullname;
@@ -47,12 +48,8 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    public enum Role {
-        USER, ADMIN
-    }
-
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> booking;
 
 }

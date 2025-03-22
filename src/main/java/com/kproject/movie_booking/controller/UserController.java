@@ -12,6 +12,8 @@ import com.kproject.movie_booking.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +44,11 @@ public class UserController {
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
         userService.registerUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 }

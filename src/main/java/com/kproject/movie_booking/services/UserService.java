@@ -9,9 +9,11 @@ public interface UserService {
 
     User getUserById(Long userId); 
 
-    User getUserByEmail(String email);
+    <Optional> User getUserByEmail(String email);
 
     List<User> getAllUsers();
     
     User registerAdmin(User admin); 
+
+    void deleteUserById(Long id);
 }

@@ -1,6 +1,6 @@
 package com.kproject.movie_booking.security.manager;
 
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,20 +19,25 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class CustomAuthenticationManager implements AuthenticationManager {
-    private final UserService userServiceImpl;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserService userServiceImpl;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        User user = userServiceImpl.getUserByEmail(authentication.getName());
-        if (!bCryptPasswordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
-            throw new BadCredentialsException("Wrong password");
+        try {
+            User user = userServiceImpl.getUserByEmail(authentication.getName());
+            if (user == null) {
+                throw new BadCredentialsException("User not found");
+            }
+            if (!bCryptPasswordEncoder.matches(authentication.getCredentials().toString(), user.getPassword())) {
+                throw new BadCredentialsException("Wrong password");
+            }
+            List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+            return new UsernamePasswordAuthenticationToken(user, null, authorities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BadCredentialsException("Authentication failed: " + e.getMessage());
         }
-
-        return new UsernamePasswordAuthenticationToken(
-                authentication.getName(),
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
-        );
     }
+
 }

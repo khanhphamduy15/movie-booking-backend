@@ -17,8 +17,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    UserRepository userRepository;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public User registerUser(User user) {
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException(id, User.class);
     }
 
-    static User unwrapUser(Optional<User> entity, String email) {
+    static User unwrapUserByMail(Optional<User> entity, String email) {
         if (entity.isPresent())
             return entity.get();
         else
@@ -63,5 +63,12 @@ public class UserServiceImpl implements UserService {
         admin.setRole("ADMIN");
         admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
         return userRepository.save(admin);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        User unwrappedUser = unwrapUser(user, id);
+        userRepository.delete(unwrappedUser);
     }
 }
