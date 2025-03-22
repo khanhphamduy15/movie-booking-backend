@@ -47,6 +47,10 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    public enum Role {
+        USER, ADMIN
+    }
+
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Booking> booking;

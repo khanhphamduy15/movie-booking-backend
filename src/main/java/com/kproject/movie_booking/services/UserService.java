@@ -11,5 +11,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    List<User> getAllUsers(); 
+    List<User> getAllUsers();
+    
+    User registerAdmin(User admin); 
 }

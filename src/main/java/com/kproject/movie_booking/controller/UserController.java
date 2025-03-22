@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.kproject.movie_booking.models.User;
 import com.kproject.movie_booking.services.UserService;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -38,9 +38,9 @@ public class UserController {
         return new ResponseEntity<User>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
-        return new ResponseEntity<User>(userService.registerUser(user), HttpStatus.OK);
+        userService.registerUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
