@@ -2,13 +2,14 @@ package com.kproject.movie_booking.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.kproject.movie_booking.security.filter.AuthenticationFilter;
-// import com.kproject.movie_booking.security.filter.ExceptionHandlerFilter;
-// import com.kproject.movie_booking.security.filter.JWTAuthorizationFilter;
+import com.kproject.movie_booking.security.filter.ExceptionHandlerFilter;
+import com.kproject.movie_booking.security.filter.JWTAuthorizationFilter;
 import com.kproject.movie_booking.security.manager.CustomAuthenticationManager;
 
 import lombok.AllArgsConstructor;
@@ -27,11 +28,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-                //         .anyRequest().authenticated())
-                // .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
-                // .addFilter(authenticationFilter)
-                // .addFilterAfter(new JWTAuthorizationFilter(), AuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/movie/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, SecurityConstants.USER_REGISTER_PATH,
+                                SecurityConstants.ADMIN_REGISTER_PATH)
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
+                .addFilter(authenticationFilter)
+                .addFilterAfter(new JWTAuthorizationFilter(), AuthenticationFilter.class);
 
         return http.build();
     }

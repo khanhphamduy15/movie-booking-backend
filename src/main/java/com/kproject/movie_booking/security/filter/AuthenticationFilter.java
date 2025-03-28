@@ -34,7 +34,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             Authentication authResult = customAuthenticationManager.authenticate(authentication);
             return authResult;
         } catch (IOException e) {
-            System.out.println("Error reading request input stream");
             throw new RuntimeException("Error reading request input stream", e);
         }
     }
@@ -51,7 +50,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String token = JWT.create()
                 .withSubject(user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRATION))
-                .withClaim("role", role)
+                .withClaim("roles", role)
                 .sign(Algorithm.HMAC512(SecurityConstants.SECRET_KEY));
         response.addHeader(SecurityConstants.AUTHORIZATION, SecurityConstants.BEARER + token);
     }
